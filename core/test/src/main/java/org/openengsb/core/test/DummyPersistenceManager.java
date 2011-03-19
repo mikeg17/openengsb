@@ -26,7 +26,7 @@ import org.osgi.framework.Bundle;
 
 public class DummyPersistenceManager implements PersistenceManager {
 
-    Map<Bundle, PersistenceService> services = new HashMap<Bundle, PersistenceService>();
+    Map<Object, PersistenceService> services = new HashMap<Object, PersistenceService>();
 
     @Override
     public PersistenceService getPersistenceForBundle(Bundle bundle) {
@@ -34,6 +34,14 @@ public class DummyPersistenceManager implements PersistenceManager {
             services.put(bundle, new DummyPersistence());
         }
         return services.get(bundle);
+    }
+
+    @Override
+    public PersistenceService getPersistenceForName(String string) {
+        if (!services.containsKey(string)) {
+            services.put(string, new DummyPersistence());
+        }
+        return services.get(string);
     }
 
 }

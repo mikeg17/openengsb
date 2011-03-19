@@ -52,6 +52,18 @@ public class NeodatisPersistenceManager implements PersistenceManager {
         return bundleService;
     }
 
+    @Override
+    public PersistenceService getPersistenceForName(String string) {
+        checkRootDirCreated();
+        String dbFile = new File(getAbsoluteRootDir(), string + ".data").getPath();
+        if (persistenceServices.containsKey(dbFile)) {
+            return persistenceServices.get(dbFile);
+        }
+        PersistenceService bundleService = new NeodatisPersistenceService(dbFile);
+        persistenceServices.put(dbFile, bundleService);
+        return bundleService;
+    }
+
     private void checkRootDirCreated() {
         File rootDir = getAbsoluteRootDir();
         if (rootDir.exists()) {

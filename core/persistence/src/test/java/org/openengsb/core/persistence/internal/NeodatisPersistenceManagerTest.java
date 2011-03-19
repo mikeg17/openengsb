@@ -19,6 +19,7 @@ package org.openengsb.core.persistence.internal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
@@ -58,6 +59,13 @@ public class NeodatisPersistenceManagerTest {
         PersistenceService first = persistenceManager.getPersistenceForBundle(bundleMock);
         PersistenceService second = persistenceManager.getPersistenceForBundle(bundleMock);
         assertThat(second == first, is(true));
+    }
+
+    @Test
+    public void getPersistenceForString_shouldReturnSamePersistence() throws Exception {
+        PersistenceService first = persistenceManager.getPersistenceForName("test");
+        PersistenceService second = persistenceManager.getPersistenceForName("test");
+        assertThat(first, sameInstance(second));
     }
 
 }

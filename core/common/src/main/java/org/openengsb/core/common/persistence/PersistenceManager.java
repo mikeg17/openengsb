@@ -20,7 +20,7 @@ package org.openengsb.core.common.persistence;
 import org.osgi.framework.Bundle;
 
 /**
- * 
+ *
  * The persistence manager is responsible for managing persistence service instances per bundle. If a bundle first calls
  * {@link #getPersistenceForBundle(Bundle)} then the persistence service for this bundle has to be created. Later calls
  * to this method from the same bundle should return exactly the same persistence service instance.
@@ -28,10 +28,16 @@ import org.osgi.framework.Bundle;
 public interface PersistenceManager {
 
     /**
-     * Get a {@link PersistenceService} instance for the specified bundle. The symbolic name and version of the bundle
-     * is used to create a unique persistence service for a bundle. This means that if this method is called twice with
-     * the same bundle exactly the same persistence reference is returned.
+     * Get a {@link PersistenceService} instance for the specified bundle. The symbolic name of the bundle is used to
+     * create a unique persistence service for a bundle. This means that if this method is called twice with the same
+     * bundle exactly the same persistence reference is returned.
      */
     PersistenceService getPersistenceForBundle(Bundle bundle);
+
+    /**
+     * Get a {@link PersistenceService} instance for the specified name. This means that if this method is called twice
+     * with the same name exactly the same persistence reference is returned.
+     */
+    PersistenceService getPersistenceForName(String string);
 
 }

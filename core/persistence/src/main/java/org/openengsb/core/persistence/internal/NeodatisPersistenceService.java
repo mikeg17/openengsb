@@ -45,16 +45,18 @@ public class NeodatisPersistenceService implements PersistenceService {
 
     private final Semaphore semaphore = new Semaphore(1);
 
-    private final Bundle bundle;
-
     private ODB database;
 
-    private CustomClassLoader loader;
+    private ClassLoader loader;
 
     public NeodatisPersistenceService(String dbFile, Bundle bundle) {
         this.dbFile = dbFile;
-        this.bundle = bundle;
-        loader = new CustomClassLoader(this.getClass().getClassLoader(), this.bundle);
+        loader = new CustomClassLoader(this.getClass().getClassLoader(), bundle);
+    }
+
+    public NeodatisPersistenceService(String dbFile) {
+        this.dbFile = dbFile;
+        this.loader = this.getClass().getClassLoader();
     }
 
     @Override
@@ -235,7 +237,9 @@ public class NeodatisPersistenceService implements PersistenceService {
         try {
             semaphore.acquire();
             if (prototype != null) {
-                loader.addClassToPool(prototype.getClass());
+                if (loader.getClass().equals(CustomClassLoader.class)) {
+                    ((CustomClassLoader) loader).addClassToPool(prototype.getClass());
+                }
             }
             openDatabase();
         } catch (InterruptedException e) {
